@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>portfolio — AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0E0D;
+    --panel: #121917;
+    --panel-2: #0E1513;
+    --line: #223330;
+    --ink: #EAF2EE;
+    --ink-dim: #7C918B;
+    --lime: #C8F26C;
+    --lime-dim: #6E8244;
+    --amber: #F2B15C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  ::selection { background: var(--lime); color: #0A0E0D; }
+  a { color: inherit; }
+
+  /* background grid texture */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 46px 46px;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(10,14,13,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto; padding: 16px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-inner .tag { font-size: 14px; color: var(--ink-dim); }
+  .nav-inner .tag b { color: var(--lime); }
+  .resume-btn {
+    background: var(--lime);
+    color: #0A0E0D;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 0 0 rgba(200,242,108,0);
+  }
+  .resume-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(200,242,108,0.25); }
+
+  /* ---------- HERO / TERMINAL ---------- */
+  .hero { padding: 70px 0 40px; }
+  .hero .eyebrow { color: var(--lime-dim); font-size: 14px; margin-bottom: 14px; }
+  .hero h1 {
+    font-size: 44px; font-weight: 700; line-height: 1.12; max-width: 640px; margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--lime); }
+  .hero p.lead { color: var(--ink-dim); font-size: 17px; max-width: 500px; margin-bottom: 30px; }
+  .name-edit {
+    font-size: 12.5px; color: var(--ink-dim); border: 1px dashed var(--line);
+    padding: 7px 11px; display: inline-block; border-radius: 4px; margin-bottom: 20px;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 60px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .sec-label {
+    font-family: 'IBM Plex Mono', monospace; color: var(--lime-dim);
+    font-size: 13px; margin-bottom: 8px;
+  }
+  section h2 { font-size: 26px; font-weight: 600; margin-bottom: 30px; }
+
+  /* skills */
+  .skill-grid { display: grid; gap: 16px; }
+  .skill-row { display: grid; grid-template-columns: 190px 1fr; gap: 18px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .skill-row:first-child { border-top: none; }
+  .skill-row .label { color: var(--amber); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; }
+  .skill-row .items { color: var(--ink); font-size: 15px; }
+  @media (max-width: 640px) { .skill-row { grid-template-columns: 1fr; gap: 4px; } }
+
+  /* projects */
+  .project {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 26px 22px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .project::before {
+    content: attr(data-idx);
+    position: absolute; top: -1px; right: 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 42px; font-weight: 700;
+    color: var(--panel-2);
+    -webkit-text-stroke: 1px var(--line);
+    line-height: 1;
+  }
+  .project .top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .project h3 { font-size: 21px; font-weight: 600; }
+  .project .when { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--ink-dim); }
+  .project .stack { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--lime-dim); margin: 8px 0 14px; }
+  .project ul { list-style: none; }
+  .project li { color: var(--ink-dim); font-size: 14.5px; margin-bottom: 8px; padding-left: 18px; position: relative; }
+  .project li::before { content: "›"; position: absolute; left: 0; color: var(--lime); }
+  .build-note { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--amber); }
+
+  /* education */
+  .edu-item { display: flex; justify-content: space-between; gap: 20px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .edu-item:first-child { border-top: none; }
+  .edu-item .school { color: var(--ink-dim); font-size: 14.5px; margin-top: 2px; }
+  .edu-item .when { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--ink-dim); white-space: nowrap; text-align: right; }
+  .edu-item .score { color: var(--lime); }
+
+  footer { padding: 50px 0 70px; color: var(--ink-dim); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="tag mono">$ whoami <b>→ ai_engineer</b></div>
+    <a class="resume-btn" id="resumeBtn"  href = "Ashiya RESUME.pdf"download="Ashiya RESUME.pdf">⬇ download resume</a>
+  </div>
+</nav>
+
+<div class="wrap hero">
+  <div class="eyebrow mono">AI/ML Engineer | Python | GenAI | LLM | Machine Learning</div>
+  <div class="name-edit">Ashiya Tamboli</div>
+  <h1>I build things that <span>retrieve, reason,</span> and talk back.</h1>
+  <p class="lead">Electronics &amp; Telecom engineer turned AI engineer. RAG pipelines, real-time systems, and backend APIs that hold up outside a notebook — not just demos.</p>
+</div>
+
+<section class="wrap" id="skills">
+  <div class="sec-label mono">01 — capabilities</div>
+  <h2>Skills</h2>
+  <div class="skill-grid">
+    <div class="skill-row"><div class="label">languages</div><div class="items">Python, JavaScript, SQL, HTML/CSS, R</div></div>
+    <div class="skill-row"><div class="label">ai / llm engineering</div><div class="items">LangChain, LlamaIndex, RAG pipelines, prompt engineering, fine-tuning concepts, Hugging Face, OpenAI, GROQ, embeddings &amp; semantic search, vector search (FAISS, ChromaDB)</div></div>
+    <div class="skill-row"><div class="label">ml / deep learning</div><div class="items">Scikit-learn, PyTorch, TensorFlow, regression, classification, clustering, CNNs, LSTMs, NLP, feature engineering</div></div>
+    <div class="skill-row"><div class="label">data science</div><div class="items">EDA, data cleaning, statistical analysis, data visualization</div></div>
+    <div class="skill-row"><div class="label">backend &amp; apis</div><div class="items">FastAPI, Flask, REST API design</div></div>
+    <div class="skill-row"><div class="label">databases &amp; tools</div><div class="items">SQL, MongoDB, Firebase, Git, Jupyter, AWS, Streamlit, Ollama</div></div>
+  </div>
+</section>
+
+<section class="wrap" id="projects">
+  <div class="sec-label mono">02 — shipped</div>
+  <h2>Projects</h2>
+
+  <div class="project" data-idx="01">
+    <div class="top"><h3>DocuMind — RAG Document Q&amp;A</h3><div class="when">Jan – Feb 2026</div></div>
+    <div class="stack">Python · FastAPI · LangChain · GROQ · FAISS · ChromaDB</div>
+    <ul>
+      <li><b>Problem:</b> manually searching long PDFs is slow, and plain LLM chat without retrieval hallucinates facts it doesn't have.</li>
+      <li><b>Technology:</b> LangChain for orchestration, GROQ API for generation, FAISS/ChromaDB for vector storage, FastAPI backend.</li>
+      <li><b>Implementation:</b> ingests uploaded PDFs, chunks and embeds them into a vector store, retrieves relevant chunks per query before passing to GROQ with a custom prompt.</li>
+      <li><b>Result:</b> diagnosed oversized-chunk overlap causing wrong-chunk retrieval; fixed it, measurably improving answer relevance. Added retrieval logging, cutting debugging time.</li>
+      <li><b>Real-world use:</b> actively use it during exams to query study notes/PDFs for specific concepts instead of scrolling manually.</li>
+    </ul>
+    <div class="build-note mono">↳ hardest call: chunk size vs overlap tradeoff — too small lost context, too large diluted relevance.</div>
+  </div>
+
+  <div class="project" data-idx="02">
+    <div class="top"><h3>CrawlMind — Web-Crawling RAG Chatbot</h3><div class="when">Jul – Aug 2026</div></div>
+    <div class="stack">Python · LangChain · Flask · Ollama · ChromaDB · BeautifulSoup</div>
+    <ul>
+      <li><b>Problem:</b> getting reliable answers from a website's content needs manual reading; most chatbots need pre-built knowledge bases or paid APIs.</li>
+      <li><b>Technology:</b> BeautifulSoup for crawling, Sentence-Transformer embeddings + ChromaDB for semantic search, Ollama for local inference, Flask API layer.</li>
+      <li><b>Implementation:</b> crawls and cleans content from any target URL, indexes it in ChromaDB, answers via a locally-hosted LLM — no external API dependency. Headless Flask POST API with LangChain memory across multi-turn chats.</li>
+      <li><b>Result:</b> fully self-hosted RAG chatbot, zero per-query API cost, usable for headless integration with no UI dependency.</li>
+      <li><b>Real-world use:</b> use it for my own job search — point it at a company's careers page or general info page and ask "any AI/ML openings right now."</li>
+    </ul>
+    <div class="build-note mono"></div>
+  </div>
+
+  <div class="project" data-idx="03">
+    <div class="top"><h3>Edrishti — Voice-Led Bus Guide</h3><div class="when">Mar – May 2026</div></div>
+    <div class="stack">Flutter · Python · Firebase · Raspberry Pi · BLE · STT/TTS</div>
+    <ul>
+      <li><b>Problem:</b> visually impaired commuters can't visually confirm which bus is arriving, and static schedules don't reflect real-time positions.</li>
+      <li><b>Technology:</b> Raspberry Pi + BLE for real-time proximity detection, Firebase Firestore for live route data, STT/TTS for voice interaction.</li>
+      <li><b>Implementation:</b> Raspberry Pi on each bus broadcasts live location over BLE; app confirms arrival in real time rather than relying on fixed schedules, then reads route/destination details aloud via TTS.</li>
+      <li><b>Result:</b> fully voice-first, hands-free commute experience — speak your destination and get audibly guided until you reach your stop.</li>
+    </ul>
+    <div class="build-note mono">↳ hardest call: BLE range/reliability on a moving bus vs GPS polling cost — chose BLE for near-instant arrival confirmation.</div>
+  </div>
+</section>
+
+<section class="wrap" id="certifications">
+  <div class="sec-label mono">03 — certifications</div>
+  <h2>Certifications</h2>
+  <div class="edu-item">
+    <div><div style="font-weight:600; font-size:16px;">Generative AI with LangChain and Hugging Face</div><div class="school">Udemy</div></div>
+  </div>
+</section>
+
+<section class="wrap" id="education">
+  <div class="sec-label mono">04 — education</div>
+  <h2>Education</h2>
+  <div class="edu-item">
+    <div><div style="font-weight:600; font-size:16px;">B.Tech, Electronics &amp; Telecommunication Engineering</div><div class="school">Pimpri Chinchwad College of Engineering</div></div>
+    <div class="when">2026</div>
+  </div>
+  <div class="edu-item">
+    <div><div style="font-weight:600; font-size:16px;">Diploma, Electronics &amp; Telecommunication</div><div class="school">SVERI's College of Engineering, Pandharpur</div></div>
+    <div class="when">2023 — <span class="score">88.71%</span></div>
+  </div>
+  <div style="margin-top:10px; color: var(--ink-dim); font-size: 13.5px; font-family: 'IBM Plex Mono', monospace;">Relevant coursework: Machine Learning, Deep Learning, NLP, Generative AI, Data Science</div>
+</section>
+
+<footer class="wrap" id="contact">
+  $ contact --Tamoliasiya18@gmail.com | www.linkedin.com/in/asiya-tamboli| https://github.com/Asiya18 <br>
+
+</footer>
+
+
+</body>
+</html>
